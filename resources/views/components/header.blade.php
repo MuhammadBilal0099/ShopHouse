@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Responsive Header with Login Hover</title>
+    <title>Responsive Header with Sidebar & Login Hover</title>
 
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
@@ -28,6 +28,8 @@
         .site-header {
             background-color: white;
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            z-index: 1000;
         }
 
         .header-container {
@@ -73,31 +75,33 @@
             gap: 20px;
         }
 
+        #menuToggle {
+            display: none;
+            font-size: 24px;
+            cursor: pointer;
+        }
+
         @media (max-width: 768px) {
-            .header-container {
-                flex-direction: column;
-                align-items: flex-start;
+            nav {
+                display: none;
             }
 
-            nav ul {
-                flex-direction: column;
-                align-items: flex-start;
-                gap: 15px;
-                margin-top: 10px;
+            #menuToggle {
+                display: block;
+            }
+
+            .header-container {
+                flex-wrap: nowrap;
             }
 
             .right-section {
-                margin-top: 15px;
-                width: 100%;
-                justify-content: space-between;
+                display: none;
+                /* Hide icons on small screen */
             }
 
-            .search-box input {
-                width: 100%;
-            }
-
-            .navbar-brand img {
-                width: 120px;
+            .right-section.show {
+                display: flex !important;
+                /* Toggle visibility when sidebar opens */
             }
         }
 
@@ -112,7 +116,47 @@
             }
         }
 
-        /* Tippy.js theme overrides */
+        /* Sidebar */
+        #sidebarMenu {
+            position: fixed;
+            top: 0;
+            left: -250px;
+            width: 250px;
+            height: 100vh;
+            background: white;
+            box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+            transition: left 0.3s ease;
+            padding: 20px;
+            z-index: 1000;
+        }
+
+        #sidebarMenu ul {
+            list-style: none;
+            padding: 20px 0;
+        }
+
+        #sidebarMenu ul li {
+            margin-bottom: 15px;
+        }
+
+        #sidebarMenu ul li a {
+            text-decoration: none;
+            color: #333;
+            font-weight: 500;
+        }
+
+        #overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 998;
+        }
+
+        /* Tippy.js overrides */
         .tippy-box[data-theme~='light-border'] {
             background-color: #fff;
             border: 1px solid #ddd;
@@ -161,14 +205,6 @@
             margin-bottom: 15px;
         }
 
-        /* "Or" Text Styling */
-        .login-card span {
-            display: block;
-            margin: 15px 0;
-            font-size: 16px;
-            color: #333;
-        }
-
         .login {
             background-color: rgb(241, 61, 19);
             color: #FFF4F1;
@@ -185,21 +221,53 @@
             background-color: rgb(221, 49, 10);
             color: #FFF;
         }
+
+        .sidebar-logo {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .sidebar-logo img {
+            width: 150px;
+            height: auto;
+        }
+
+        .sidebar-logo i {
+            font-size: 20px;
+            cursor: pointer;
+        }
+
+
+        .sidebar-menu li {
+            border-bottom: 1px solid #ddd;
+            padding: 10px 0;
+        }
+
+        .sidebar-menu li:last-child {
+            border-bottom: none;
+        }
     </style>
 </head>
 
 <body>
 
+    <!-- Header -->
     <header class="site-header">
         <div class="header-container">
             <!-- Logo -->
-            <div style="font-size: 24px; font-weight: bold; color: #333;">
-                <a class="navbar-brand" href="{{ url('/') }}">
+            <div>
+                <a class="navbar-brand" href="#">
                     <img src="{{ asset('assets/images/theme-logo.png') }}" alt="Logo" />
                 </a>
             </div>
 
-            <!-- Navigation Links -->
+            <!-- Menu Toggle (Hamburger) -->
+            <div id="menuToggle">
+                <i class="fas fa-bars"></i>
+            </div>
+
+            <!-- Navigation -->
             <nav>
                 <ul>
                     <li><a href="#">Home</a></li>
@@ -210,26 +278,6 @@
                     </li>
                 </ul>
             </nav>
-
-
-            {{-- <nav>
-                <ul>
-                    <li class="{{ request()->routeIs('home') && !request()->is('categories*') && !request()->is('offers*') ? 'active' : '' }}">
-                        <a href="{{ route('home') }}">Home</a>
-                    </li>
-                    <li class="{{ request()->is('categories*') ? 'active' : '' }}">
-                        <a href="{{ url('/categories') }}">Categories</a>
-                    </li>
-                    <li class="{{ request()->is('offers*') ? 'active' : '' }}">
-                        <a href="{{ url('/offers') }}">Offers</a>
-                    </li>
-                    <li class="search-box">
-                        <input type="text" placeholder="Search..." />
-                    </li>
-                </ul>
-            </nav> --}}
-
-
 
             <!-- Right Section -->
             <div class="right-section">
@@ -245,22 +293,36 @@
         </div>
     </header>
 
-    <!-- Hidden Login Card Content -->
+    <div id="sidebarMenu">
+        <div class="sidebar-logo">
+            <img src="{{ asset('assets/images/theme-logo.png') }}" alt="Logo" />
+            <i class="fa fa-times" style="color: rgb(241, 61, 19)"  onclick="toggleSidebar()"></i>
+        </div>
+        <ul class="sidebar-menu">
+            <li><a href="#">Home</a></li>
+            <li><a href="#">Categories</a></li>
+            <li><a href="#">Offers</a></li>
+            <li><a href="#">English</a></li>
+            <li><a href="#"><i class="fas fa-user fa-fw"></i></a></li>
+            <li><a href="#"><i class="fas fa-shopping-bag fa-fw"></i></a></li>
+        </ul>
+    </div>
+
+    <!-- Overlay -->
+    <div id="overlay" onclick="toggleSidebar()"></div>
+
+    <!-- Login Card (Hidden Content) -->
     <div id="loginCardContent" style="display: none;">
-        <div class="login-card" style="width: 350px; padding: 40px;">
-            <!-- Register Heading -->
+        <div class="login-card">
             <a class="register-heading">Register your Account</a>
-
-            <!-- "Or" Text -->
             <div style="text-align: center; margin: 15px 0; font-size: 16px; color: #333;">Or</div>
-
-            <!-- Login Link -->
-            <a href={{route('loginForm')}} class="login">Login to your account</a>
+            <a href="{{ route('loginForm') }}" class="login">Login to your account</a>
         </div>
     </div>
 
+    <!-- Scripts -->
     <script>
-        // Initialize Tippy on user icon
+        // Tippy Login Card
         tippy('#userIcon', {
             content: document.getElementById('loginCardContent').innerHTML,
             allowHTML: true,
@@ -269,6 +331,24 @@
             trigger: 'mouseenter focus',
             theme: 'light-border',
         });
+
+        // Sidebar toggle
+        function toggleSidebar() {
+            const sidebar = document.getElementById("sidebarMenu");
+            const overlay = document.getElementById("overlay");
+
+            if (sidebar.style.left === "0px") {
+                sidebar.style.left = "-250px";
+                overlay.style.display = "none";
+                rightSection.classList.remove("show");
+            } else {
+                sidebar.style.left = "0px";
+                overlay.style.display = "block";
+                rightSection.classList.add("show");
+            }
+        }
+
+        document.getElementById("menuToggle").addEventListener("click", toggleSidebar);
     </script>
 
 </body>

@@ -3,7 +3,7 @@
 @section('content')
     <div class="container py-5">
         <div class="row justify-content-center">
-            <div class="col-lg-6 col-md-8 col-sm-10">
+            <div class="col-lg-6 col-md-8 col-sm-10 width-90">
                 <div class="card border-0 rounded-4 overflow-hidden shadow-sm">
                     <div class="row g-0">
                         <!-- Image Side -->
@@ -13,7 +13,7 @@
                         </div>
 
                         <!-- Form Side -->
-                        <div class="col-md-6 p-4 p-md-5 bg-white">
+                        <div class="col-md-6 p-4  bg-white">
                             <h2 class="text-center fw-bold mb-2 signIn">Sign In</h2>
                             <p class="text-center mb-4 shopping">Sign in to continue shopping</p>
 
@@ -21,10 +21,9 @@
                                 @csrf
 
                                 <div class="mb-3">
-                                    <label for="email" class="form-label fw-bold">Email *</label>
-                                    <div class="d-flex justify-content-between align-items-center mb-1">
-                                        <span></span>
-                                        <a href="#" class="text-decoration-none signIn">Use Phone Instead</a>
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <label for="email" class="form-label fw-bold mb-0">Email *</label>
+                                        <a href="#" class="text-decoration-none font-color">Use Phone Instead</a>
                                     </div>
                                     <input id="email" type="email"
                                         class="form-control @error('email') is-invalid @enderror" name="email"
@@ -33,6 +32,7 @@
                                         <span class="invalid-feedback"><strong>{{ $message }}</strong></span>
                                     @enderror
                                 </div>
+
 
                                 <div class="mb-3">
                                     <label for="password" class="form-label fw-bold">Password *</label>
@@ -50,7 +50,7 @@
                                             {{ old('remember') ? 'checked' : '' }}>
                                         <label class="form-check-label" for="remember">Remember Me</label>
                                     </div>
-                                    <a href="#" class="text-decoration-none signIn">Forgot Password?</a>
+                                    <a href="#" class="text-decoration-none font-color">Forgot Password?</a>
                                 </div>
 
                                 <button type="submit" class="btn w-100 text-white fw-semibold py-2 mb-3"
@@ -105,6 +105,10 @@
             box-shadow: 0 0 0 0.2rem rgba(244, 67, 22, 0.25);
         }
 
+        .font-color {
+            color: #f44316;
+        }
+
         .btn {
             border-radius: 8px;
             font-size: 16px;
@@ -113,7 +117,7 @@
 
         .signIn {
             color: #f44316;
-            font-size: 24px;
+            font-size: 25px;
         }
 
         .shopping {
@@ -122,7 +126,7 @@
         }
 
         .fs-20 {
-            font-size: 16px;
+            font-size: 18px;
         }
 
         .card {
@@ -134,30 +138,22 @@
             object-fit: cover;
         }
 
-        @media (max-width: 768px) {
-            .card {
-                border-radius: 0 !important;
-            }
-
-            .signIn {
-                font-size: 20px;
-            }
-
-            .shopping,
-            .fs-20 {
-                font-size: 14px;
-            }
-
-            .btn {
-                font-size: 14px;
-                padding: 8px 0;
-            }
-        }
-
         @media (min-width: 576px) {
             .container {
                 max-width: 100%;
             }
         }
+
+        @media (max-width: 1026px) {
+            .width-90 {
+                width: 90% !important;
+            }
+        }
+
+        /* @media (min-width: 770px) {
+            .width-90 {
+                width: 92% !important;
+            }
+        } */
     </style>
 @endsection
