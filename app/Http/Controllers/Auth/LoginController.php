@@ -37,4 +37,9 @@ class LoginController extends Controller
 
         return redirect()->back()->with('login_error', 'Invalid email or password.')->withInput();
     }
+
+    public function signUpForm()
+    {
+        return view('auth.signup');
+    }
 }

@@ -7,3 +7,5 @@ Route::get('/', [HomeController::class, 'HomePage'])->name('home');
 
 Route::get('login', [LoginController::class, 'loginForm'])->name('loginForm');
 Route::post('user-login', [LoginController::class, 'userLogin'])->name('userLogin');
+Route::get('signup', [LoginController::class, 'signUpForm'])->name('signUpForm');
+

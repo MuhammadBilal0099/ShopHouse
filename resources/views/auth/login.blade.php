@@ -60,7 +60,7 @@
                             style="background-color: #f44316; border-radius: 50px;">Sign In</button>
 
                         <p class="text-center mt-3 mb-2 text-muted f-s">Don't have an account?
-                            <a href="#" class="text-decoration-none signIn fw-semibold">Sign Up</a>
+                            <a href="{{route('signUpForm')}}" class="text-decoration-none signIn fw-semibold">Sign Up</a>
                         </p>
 
                         <div class="text-center mt-4">

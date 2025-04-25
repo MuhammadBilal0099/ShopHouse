@@ -270,7 +270,7 @@
             <!-- Navigation -->
             <nav>
                 <ul>
-                    <li><a href="#">Home</a></li>
+                    <li><a href="{{route('home')}}">Home</a></li>
                     <li><a href="#">Categories</a></li>
                     <li><a href="#">Offers</a></li>
                     <li class="search-box">
@@ -314,7 +314,7 @@
     <!-- Login Card (Hidden Content) -->
     <div id="loginCardContent" style="display: none;">
         <div class="login-card">
-            <a class="register-heading">Register your Account</a>
+            <a href="{{ route('signUpForm') }}" class="register-heading">Register your Account</a>
             <div style="text-align: center; margin: 15px 0; font-size: 16px; color: #333;">Or</div>
             <a href="{{ route('loginForm') }}" class="login">Login to your account</a>
         </div>
